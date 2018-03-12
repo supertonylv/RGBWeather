@@ -1,0 +1,17 @@
+<resources>
+    <string name="app_name">RGBWeather</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="action_settings">Settings</string>
+    <string name="air_quality">空气质量</string>
+    <string name="comfor_level">舒适度</string>
+    <string name="dressing_index">穿衣指数</string>
+    <string name="cold">感冒</string>
+    <string name="sports">运动</string>
+    <string name="travel">旅游</string>
+    <string name="ultraviolet">紫外线</string>
+    <string name="car_wash">洗车</string>
+    <string name="title_activity_welcom">WelcomActivity</string>
+</resources>
