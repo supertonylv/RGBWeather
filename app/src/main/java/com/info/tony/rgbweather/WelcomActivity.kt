@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.support.design.widget.Snackbar
 import android.support.v7.app.AppCompatActivity
+import android.util.Log
 import com.info.tony.rgbweather.data.db.CityDatabaseHelper
 import com.info.tony.rgbweather.data.preference.PreferenceHelper
 import com.info.tony.rgbweather.data.preference.WeatherSettings
@@ -21,7 +22,7 @@ class WelcomActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_welcom)
         setSupportActionBar(toolbar)
-
+        Log.e("WelcomActovity","onCreate()")
         fab.setOnClickListener { view ->
             Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                     .setAction("Action", null).show()

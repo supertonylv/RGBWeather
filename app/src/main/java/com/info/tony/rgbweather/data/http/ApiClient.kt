@@ -26,10 +26,11 @@ object ApiClient {
     public fun init(configuration: ApiConfiguration1?) {
         apiConfiguration = configuration;
         when(configuration?.dataSourceType) {
-            ApiConstants.WEATHER_DATA_SOURCE_TYPE_KNOW -> initWeatherService(ApiConstants.KNOW_WEATHER_API_HOST,WeatherService::class.java)
-            ApiConstants.WEATHER_DATA_SOURCE_TYPE_ENVIRONMENT_CLOUD -> initWeatherService(ApiConstants.ENVIRONMENT_CLOUD_WEATHER_API_HOST,EnvironmentCloudWeatherService::class.java)
-            ApiConstants.WEATHER_DATA_SOURCE_TYPE_MI -> {initWeatherService(ApiConstants.MI_WEATHER_API_HOST,WeatherService::class.java)}
-            else -> throw RuntimeException("ApiClient dataSourceType does not support!")
+            ApiConstants.WEATHER_DATA_SOURCE_TYPE_KNOW -> weatherService = initWeatherService<WeatherService>(ApiConstants.KNOW_WEATHER_API_HOST,WeatherService::class.java)
+            ApiConstants.WEATHER_DATA_SOURCE_TYPE_ENVIRONMENT_CLOUD -> environmentCloudWeatherService = initWeatherService(ApiConstants.ENVIRONMENT_CLOUD_WEATHER_API_HOST,EnvironmentCloudWeatherService::class.java)
+            ApiConstants.WEATHER_DATA_SOURCE_TYPE_MI ->  {
+                weatherService = initWeatherService(ApiConstants.MI_WEATHER_API_HOST,WeatherService::class.java)}
+            else -> throw Throwable("ApiClient dataSourceType does not support!")
 
         }
     }

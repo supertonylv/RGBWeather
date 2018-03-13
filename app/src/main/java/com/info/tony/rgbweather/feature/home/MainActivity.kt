@@ -9,12 +9,28 @@ import android.support.v4.widget.DrawerLayout
 import android.support.v7.app.ActionBarDrawerToggle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.Toolbar
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import com.info.tony.rgbweather.R
 import com.info.tony.rgbweather.base.BaseActivity
+import com.info.tony.rgbweather.data.db.dao.WeatherDao
+import com.info.tony.rgbweather.data.db.entities.rgblist.Weather
+import com.info.tony.rgbweather.data.preference.PreferenceHelper
+import com.info.tony.rgbweather.data.preference.WeatherSettings
+import com.info.tony.rgbweather.data.repository.WeatherDataRepository
 import kotlinx.android.synthetic.main.activity_main.*
+import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.find
+import rx.*
+import rx.Observable
+import rx.Observer
+import java.util.*
+import rx.android.plugins.RxAndroidSchedulersHook
+import rx.android.schedulers.AndroidSchedulers
+import rx.functions.Action
+import rx.functions.Action1
+import rx.schedulers.Schedulers
 
 class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedListener {
 
@@ -30,6 +46,16 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         fab.setOnClickListener { view ->
             Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                     .setAction("Action", null).show()
+            val cityId = PreferenceHelper.getSharedPreferences().getString(WeatherSettings.SETTINGS_CURRENT_CITY_ID.getId(),"");
+            Log.e("xxxxx","cityId"+cityId)
+            WeatherDataRepository.getWeather(this@MainActivity,cityId,WeatherDao(context = this@MainActivity),true)
+                    ?.subscribeOn(Schedulers.io())
+                     ?.observeOn(AndroidSchedulers.mainThread())
+//                     ?.subscribe(Action1 { displayWeather(it) }, Action1 {  })
+                    ?.subscribe(Action1<Weather>(){
+                        displayWeather(it)
+                    })
+
         }
 
         drawerLayout = find<DrawerLayout>(R.id.drawer_layout)
@@ -40,6 +66,10 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
 
         val navView = find<NavigationView>(R.id.nav_view)
         navView.setNavigationItemSelectedListener(this)
+    }
+
+    fun displayWeather(weather: Weather){
+        Log.e("xxx","weather = "+ weather.cityName)
     }
 
     override fun onBackPressed() {
@@ -93,3 +123,4 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         return true
     }
 }
+

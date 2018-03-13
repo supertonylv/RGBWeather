@@ -2,6 +2,7 @@ package com.info.tony.rgbweather.data.repository
 
 import android.content.Context
 import android.text.TextUtils
+import android.util.Log
 import com.info.tony.library.util.NetworkUtils
 import com.info.tony.rgbweather.data.db.dao.WeatherDao
 import com.info.tony.rgbweather.data.db.entities.adapter.CloudWeatherAdapter
@@ -25,22 +26,23 @@ import java.util.function.Consumer
  */
 object WeatherDataRepository {
 
-    fun getWeather(context: Context, cityId: String, weatherDao: WeatherDao, refreshNow: Boolean): Observable<Weather> {
-
+    fun getWeather(context: Context, cityId: String, weatherDao: WeatherDao, refreshNow: Boolean): Observable<Weather>?{
+        Log.e("xxx","getWeather")
         //从数据库获取天气数据
         val observableForGetWeatherFromDB = Observable.create<Weather> { subscriber ->
             try {
                 val weather = weatherDao.queryWeather(cityId)
+                Log.e("xxx","xxx weather")
                 subscriber.onNext(weather)
                 subscriber.onCompleted()
             } catch (e: SQLException) {
                 throw Exceptions.propagate(e)
             }
         }
-
+        Log.e("xxx","getWeather1")
         if (!NetworkUtils.isNetworkConnected(context))
             return observableForGetWeatherFromDB
-
+        Log.e("xxx","getWeather2")
         //从服务端获取天气数据
         var observableForGetWeatherFromNetWork: Observable<Weather>? = null
         when (ApiClient.apiConfiguration?.dataSourceType) {
@@ -54,10 +56,12 @@ object WeatherDataRepository {
                 val forecastObservable = ApiClient.environmentCloudWeatherService?.getWeatherForecast(cityId)
                 val airLiveObservable = ApiClient.environmentCloudWeatherService?.getAirLive(cityId)
 
+                Log.e("xxxx","weatherLive="+weatherLiveObservable+" forecastObservable="+forecastObservable+" airLiveObservable="+airLiveObservable)
                 observableForGetWeatherFromNetWork = Observable.combineLatest<EnvironmentCloudWeatherLive, EnvironmentCloudForecast, EnvironmentCloudCityAirLive, Weather>(weatherLiveObservable, forecastObservable, airLiveObservable
                 ) { weatherLive, forecast, airLive -> CloudWeatherAdapter(weatherLive, forecast, airLive).getWeather() }
             }
         }
+        Log.e("xxx","getWeather3")
         assert(observableForGetWeatherFromNetWork != null)
         observableForGetWeatherFromNetWork = observableForGetWeatherFromNetWork?.doOnNext { weather ->
             Schedulers.io().createWorker().schedule {
@@ -69,11 +73,12 @@ object WeatherDataRepository {
             }
         }
 
-
-        return Observable.concat<Weather>(observableForGetWeatherFromDB, observableForGetWeatherFromNetWork)
-                .filter { weather -> weather != null && !TextUtils.isEmpty(weather?.cityId) }
-                .distinct<Any> { weather -> weather.weatherLive?.time }
-                .takeUntil { weather -> !refreshNow && System.currentTimeMillis() - (weather.weatherLive?.time ?:0 )<= 15 * 60 * 1000 }
+        Log.e("xxx","getWeather4 observableForGetWeatherFromNetWork="+observableForGetWeatherFromNetWork)
+        return observableForGetWeatherFromNetWork
+//        return Observable.concat<Weather>(observableForGetWeatherFromDB, observableForGetWeatherFromNetWork)
+//                .filter { weather -> weather != null && !TextUtils.isEmpty(weather?.cityId) }
+//                .distinct<Any> { weather -> weather.weatherLive?.time }
+//                .takeUntil { weather -> !refreshNow && System.currentTimeMillis() - (weather.weatherLive?.time ?:0 )<= 15 * 60 * 1000 }
     }
 }
 

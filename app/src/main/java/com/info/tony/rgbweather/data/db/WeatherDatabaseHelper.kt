@@ -3,6 +3,7 @@ package com.info.tony.rgbweather.data.db
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.util.Log
+import com.info.tony.rgbweather.WeatherApplication
 import com.info.tony.rgbweather.data.db.entities.rgblist.*
 import com.j256.ormlite.android.apptools.OrmLiteSqliteOpenHelper
 import com.j256.ormlite.dao.Dao
@@ -19,8 +20,12 @@ class WeatherDatabaseHelper : OrmLiteSqliteOpenHelper {
     companion object {
         private val DATABASE_NAME = "weather.db"
         private val DATABASE_VERSION = 1
-        fun instance(context: Context): WeatherDatabaseHelper = WeatherDatabaseHelper(context.applicationContext)
+        fun instance(context: Context): WeatherDatabaseHelper = Inner.innerSingle
 
+    }
+
+    private object Inner{
+        val innerSingle = WeatherDatabaseHelper(WeatherApplication.instance)
     }
 
     constructor(context: Context) : super(context, DATABASE_NAME, null, DATABASE_VERSION)

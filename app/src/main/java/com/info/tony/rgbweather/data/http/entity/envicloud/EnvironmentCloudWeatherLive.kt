@@ -6,7 +6,7 @@ import com.alibaba.fastjson.annotation.JSONField
  * 天气实况
  * Created by lvlu on 2018/3/9.
  */
-data class EnvironmentCloudWeatherLive (
+open class EnvironmentCloudWeatherLive (
 
 
     /**

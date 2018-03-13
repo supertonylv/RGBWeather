@@ -23,11 +23,12 @@ class CityDatabaseHelper: OrmLiteSqliteOpenHelper {
     companion object {
         private val DATABASE_NAME = "city.db"
         private val DATABASE_VERSION = 1
-        fun instance(context: Context) : CityDatabaseHelper = CityDatabaseHelper(context.applicationContext)
+        fun instance(context: Context) : CityDatabaseHelper = Inner.innerSingle
     }
 
-    @Volatile
-    private var instance: CityDatabaseHelper? = null
+    object Inner{
+        val innerSingle = CityDatabaseHelper(WeatherApplication.instance)
+    }
 
    constructor(context: Context):super(context,DATABASE_NAME, null,DATABASE_VERSION){
 
@@ -62,10 +63,11 @@ class CityDatabaseHelper: OrmLiteSqliteOpenHelper {
      * 导入城市数据库
      */
     fun importCityDB() {
-
+        Log.e("xxxxx","importCityDB")
         // 判断保持城市的数据库文件是否存在
         val file = File(WeatherApplication.instance.getDatabasePath(DATABASE_NAME).getAbsolutePath())
         if (!file.exists()) {// 如果不存在，则导入数据库文件
+            Log.e("xxxxx","import Db!")
             //数据库文件
             val dbFile = WeatherApplication.instance.getDatabasePath(DATABASE_NAME)
             try {

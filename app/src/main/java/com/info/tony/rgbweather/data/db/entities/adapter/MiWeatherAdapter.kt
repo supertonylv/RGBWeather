@@ -6,7 +6,6 @@ import com.info.tony.rgbweather.data.db.entities.rgblist.LifeIndex
 import com.info.tony.rgbweather.data.db.entities.rgblist.WeatherForecast
 import com.info.tony.rgbweather.data.db.entities.rgblist.WeatherLive
 import com.info.tony.rgbweather.data.http.entity.mi.MiWeather
-import java.util.ArrayList
 
 /**
  * Created by lvlu on 2018/3/11.

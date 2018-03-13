@@ -7,16 +7,16 @@ def stethoVersion = "1.5.0"
 def butterKnifeVersion = "8.5.1"
 def daggerVersion = "2.8"
 def ormLiteVersion = "5.1"
-def fastJsonVersion = "1.1.68.android"
+def fastJsonVersion = "1.2.36"
 def anko_version = "0.10.4"
-def kotlin_version = "1.1.51"
+def kotlin_version = "1.2.30"
 def constraint_version = "1.0.2"
 
 project.ext {
     android = [
             compileSdkVersion: 26,
             buildToolsVersion: "26.0.2",
-            applicationId    : "com.baronzhang.android.weather",
+            applicationId    : "com.tony.android.weather",
             minSdkVersion    : 21,
             targetSdkVersion : 26,
             versionCode      : 1,
@@ -40,7 +40,7 @@ project.ext {
             "anko"   : "org.jetbrains.anko:anko:${anko_version}",
 
             //rx
-            "rxandroid"                   : "io.reactivex:rxandroid:1.2.1",
+            "rxandroid"                   : "io.reactivex.rxjava2:rxandroid:2.0.2",
             "rxbinding"                   : "com.jakewharton.rxbinding:rxbinding:${rxBindingVersion}",
             "rxbinding-support-v4"        : "com.jakewharton.rxbinding:rxbinding-support-v4:${rxBindingVersion}",
             "rxbinding-appcompat-v7"      : "com.jakewharton.rxbinding:rxbinding-appcompat-v7:${rxBindingVersion}",

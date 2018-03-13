@@ -51,7 +51,8 @@ open class CloudWeatherAdapter:WeatherAdapter {
 
     override fun getWeatherForecasts(): List<WeatherForecast> {
 
-        val weatherForecasts = ArrayList<WeatherForecast>()
+//        val weatherForecasts = ArrayList<WeatherForecast>()
+        var weatherForecasts = emptyList<WeatherForecast>()
 
         cloudForecast?.forecast?.forEach {
             val weatherForecast = WeatherForecast(
@@ -75,7 +76,7 @@ open class CloudWeatherAdapter:WeatherAdapter {
                     moonrise = it.astro?.mr,
                     moonset = it.astro?.ms
             )
-            weatherForecasts.add(weatherForecast)
+            weatherForecasts += weatherForecast
         }
         return weatherForecasts
     }
