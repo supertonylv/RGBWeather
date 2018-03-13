@@ -1,5 +1,6 @@
 package com.info.tony.rgbweather.data.db.entities.adapter
 
+import android.util.Log
 import com.info.tony.library.util.DateConvertUtils
 import com.info.tony.rgbweather.R
 import com.info.tony.rgbweather.WeatherApplication
@@ -16,7 +17,23 @@ import com.info.tony.rgbweather.data.http.entity.envicloud.EnvironmentCloudWeath
  */
 open class CloudWeatherAdapter:WeatherAdapter {
     override fun getAirQualityLive(): AirQualityLive {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        val airQualityLive = AirQualityLive(
+                cityId = cloudCityAirLive?.cityId,
+                aqi = cloudCityAirLive?.aqi?.toInt() ?: 0,
+                co = cloudCityAirLive?.co,
+                no2 = cloudCityAirLive?.no2,
+                o3 = cloudCityAirLive?.o3,
+                pm25 = cloudCityAirLive?.pm25?.toInt() ?: 0,
+                pm10 = cloudCityAirLive?.pm10?.toInt() ?: 0,
+                primary = cloudCityAirLive?.primary,
+                publishTime = cloudCityAirLive?.time,
+                quality = getAqiQuality(cloudCityAirLive?.aqi?.toInt() ?: 0),
+                so2 = cloudCityAirLive?.so2
+
+
+
+        )
+        return airQualityLive
     }
 
     private var cloudWeatherLive: EnvironmentCloudWeatherLive? = null
@@ -30,7 +47,8 @@ open class CloudWeatherAdapter:WeatherAdapter {
     }
 
     override fun getCityId(): String {
-        return cloudWeatherLive?.cityId ?:""
+        var cityId =  cloudWeatherLive?.citycode ?:"11111"
+        return cityId
     }
 
     override fun getCityName(): String {
@@ -43,41 +61,52 @@ open class CloudWeatherAdapter:WeatherAdapter {
 
     override fun getWeatherLive(): WeatherLive {
         var date:Long = DateConvertUtils.dateToTimeStamp(cloudWeatherLive?.updateTime ?: "",DateConvertUtils.DATA_FORMAT_PATTEN_YYYY_MM_DD_HH_MM)
-        val weatherLive = WeatherLive(cloudWeatherLive?.cityId,cloudWeatherLive?.phenomena,cloudWeatherLive?.temperature,cloudWeatherLive?.humidity,
+        val weatherLive = WeatherLive(cloudWeatherLive?.citycode,cloudWeatherLive?.phenomena,cloudWeatherLive?.temperature,cloudWeatherLive?.humidity,
                 cloudWeatherLive?.windDirect,cloudWeatherLive?.windSpeed,date,cloudWeatherLive?.windPower,cloudWeatherLive?.rain,
                 cloudWeatherLive?.feelsTemperature,cloudWeatherLive?.airPressure)
         return weatherLive
     }
 
     override fun getWeatherForecasts(): List<WeatherForecast> {
+        Log.e("xxxx","xxx getWeatherForecasts")
+//        if (true) return emptyList()
+        val weatherForecasts = ArrayList<WeatherForecast>()
+//        var weatherForecasts = emptyList<WeatherForecast>()
 
-//        val weatherForecasts = ArrayList<WeatherForecast>()
-        var weatherForecasts = emptyList<WeatherForecast>()
-
-        cloudForecast?.forecast?.forEach {
-            val weatherForecast = WeatherForecast(
-                    cityId = getCityId(),
+        try {
+            cloudForecast?.forecast?.forEach {
+                var weatherForecast = WeatherForecast(
+                        cityId = getCityId(),
 //                    weather = it.pres
-                    weatherDay = it.cond?.cond_d,
-                    weatherNight = it.cond?.cond_n,
-                    tempMax = it.tmp?.max?.toInt() ?:0,
-                    tempMin = it.tmp?.min?.toInt() ?: 0,
-                    wind = it.wind?.dir,
-                    date = DateConvertUtils.convertDataToString(it?.date ?:""),
-                    week = DateConvertUtils.convertDataToWeek(it?.date ?: ""),
-                    pop = it.pop,
-                    uv = it.uv,
-                    visibility = it.vis,
-                    humidity = it.hum,
-                    pressure = it.pres,
-                    precipitation = it.pres,
-                    sunrise = it.astro?.sr,
-                    sunset = it.astro?.ss,
-                    moonrise = it.astro?.mr,
-                    moonset = it.astro?.ms
-            )
-            weatherForecasts += weatherForecast
+                        weatherDay = it.cond?.cond_d,
+                        weatherNight = it.cond?.cond_n,
+                        tempMax = it.tmp?.max?.toInt() ?:0,
+                        tempMin = it.tmp?.min?.toInt() ?: 0,
+                        wind = it.wind?.dir,
+                        date = DateConvertUtils.convertDataToString(it?.date ?:""),
+                        week = DateConvertUtils.convertDataToWeek(it?.date ?: ""),
+                        pop = it.pop,
+                        uv = it.uv,
+                        visibility = it.vis,
+                        humidity = it.hum,
+                        pressure = it.pres,
+                        precipitation = it.pres,
+                        sunrise = it.astro?.sr,
+                        sunset = it.astro?.ss,
+                        moonrise = it.astro?.mr,
+                        moonset = it.astro?.ms
+                )
+                Log.e("xxxx","xxx getWeatherForecasts11")
+                weatherForecasts.add(weatherForecast)
+            }
+            Log.e("xxxx","xxx getWeatherForecasts22")
+        }catch (e:Exception){
+            Log.e("xxxx","xxx getWeatherForecasts33")
+            Log.e("xxxxx","xxx e=")
+        }finally {
+            Log.e("xxxx","xxx getWeatherForecasts44")
         }
+
         return weatherForecasts
     }
 

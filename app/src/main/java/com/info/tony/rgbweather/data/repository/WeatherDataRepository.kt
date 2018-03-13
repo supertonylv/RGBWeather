@@ -57,21 +57,26 @@ object WeatherDataRepository {
                 val airLiveObservable = ApiClient.environmentCloudWeatherService?.getAirLive(cityId)
 
                 Log.e("xxxx","weatherLive="+weatherLiveObservable+" forecastObservable="+forecastObservable+" airLiveObservable="+airLiveObservable)
-                observableForGetWeatherFromNetWork = Observable.combineLatest<EnvironmentCloudWeatherLive, EnvironmentCloudForecast, EnvironmentCloudCityAirLive, Weather>(weatherLiveObservable, forecastObservable, airLiveObservable
-                ) { weatherLive, forecast, airLive -> CloudWeatherAdapter(weatherLive, forecast, airLive).getWeather() }
+//                observableForGetWeatherFromNetWork = Observable.combineLatest<EnvironmentCloudWeatherLive, EnvironmentCloudForecast, EnvironmentCloudCityAirLive, CloudWeatherAdapter>(weatherLiveObservable, forecastObservable, airLiveObservable
+//                ,{ weatherLive, forecast, airLive -> CloudWeatherAdapter(weatherLive, forecast, airLive) })
+//                        .map { t: CloudWeatherAdapter? ->  t?.getWeather()}
+                var ob1:Observable<CloudWeatherAdapter> = Observable.combineLatest<EnvironmentCloudWeatherLive, EnvironmentCloudForecast, EnvironmentCloudCityAirLive, CloudWeatherAdapter>(weatherLiveObservable, forecastObservable, airLiveObservable
+                        ,{ weatherLive, forecast, airLive -> CloudWeatherAdapter(weatherLive, forecast, airLive) })
+                observableForGetWeatherFromNetWork = ob1.map { t ->  t.getWeather()}
+
             }
         }
         Log.e("xxx","getWeather3")
         assert(observableForGetWeatherFromNetWork != null)
-        observableForGetWeatherFromNetWork = observableForGetWeatherFromNetWork?.doOnNext { weather ->
-            Schedulers.io().createWorker().schedule {
-                try {
-                    weatherDao.insertOrUpdateWeather(weather)
-                } catch (e: SQLException) {
-                    throw Exceptions.propagate(e)
-                }
-            }
-        }
+//        observableForGetWeatherFromNetWork = observableForGetWeatherFromNetWork?.doOnNext { weather ->
+//            Schedulers.io().createWorker().schedule {
+//                try {
+//                    weatherDao.insertOrUpdateWeather(weather)
+//                } catch (e: SQLException) {
+//                    throw Exceptions.propagate(e)
+//                }
+//            }
+//        }
 
         Log.e("xxx","getWeather4 observableForGetWeatherFromNetWork="+observableForGetWeatherFromNetWork)
         return observableForGetWeatherFromNetWork

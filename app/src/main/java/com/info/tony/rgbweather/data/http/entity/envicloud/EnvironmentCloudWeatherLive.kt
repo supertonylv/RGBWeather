@@ -58,5 +58,5 @@ open class EnvironmentCloudWeatherLive (
     var windSpeed: String? = null,//风速(m/s)
 
     @JSONField(name = "citycode")
-    var cityId: String? = null//城市ID
+    var citycode: String? = null//城市ID
 )

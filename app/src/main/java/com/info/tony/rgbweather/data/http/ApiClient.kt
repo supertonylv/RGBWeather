@@ -39,13 +39,13 @@ object ApiClient {
 
 
         val builder = OkHttpClient().newBuilder()
-//            if (BuildConfig.DEBUG) {
-//                val httpLoggingInterceptor = HttpLoggingInterceptor()
-//                httpLoggingInterceptor.level = HttpLoggingInterceptor.Level.BODY
-//                builder.addInterceptor(httpLoggingInterceptor)
-//                //            builder.addNetworkInterceptor(new StethoInterceptor());
+            if (BuildConfig.DEBUG) {
+                val httpLoggingInterceptor = HttpLoggingInterceptor()
+                httpLoggingInterceptor.level = HttpLoggingInterceptor.Level.BODY
+                builder.addInterceptor(httpLoggingInterceptor)
+                //            builder.addNetworkInterceptor(new StethoInterceptor());
 //                BuildConfig.STETHO.addNetworkInterceptor(builder)
-//            }
+            }
         val client = builder.build()
 
         val retrofit = Retrofit.Builder()
