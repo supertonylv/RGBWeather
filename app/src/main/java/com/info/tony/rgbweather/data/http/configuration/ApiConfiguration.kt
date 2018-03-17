@@ -5,10 +5,10 @@ package com.info.tony.rgbweather.data.http.configuration
  */
 open class ApiConfiguration {
 
-    private var dataSourceType:Int? = null;
+    private var dataSourceType:Int? = null
 
     fun setDataSourceType(type:Int) {
-        dataSourceType = type;
+        dataSourceType = type
     }
 
     companion object {

@@ -14,7 +14,7 @@ class MiWeatherAdapter:WeatherAdapter {
     private var miWeather: MiWeather
 
     constructor(miWeather : MiWeather){
-        this.miWeather = miWeather;
+        this.miWeather = miWeather
     }
 
     override fun getCityId(): String {

@@ -9,25 +9,23 @@ import com.j256.ormlite.table.DatabaseTable
  */
 @DatabaseTable(tableName = "City")
 data  class City (
-    @DatabaseField(columnName = CityConst.ID_FIELD_NAME,dataType = DataType.INTEGER, generatedId = true)
-    private val id: Int? = null,
+    @DatabaseField(columnName = CityConst.ID_FIELD_NAME,dataType = DataType.INTEGER_OBJ, generatedId = true)
+    val id: Int? = null,
     @DatabaseField(columnName = CityConst.ROOT_FIELD_NAME,dataType = DataType.STRING)
-    private var root: String? = null,
+    var root: String? = null,
     @DatabaseField(columnName = CityConst.PARENT_FIELD_NAME,dataType = DataType.STRING)
-    private var parent: String? = null,
-    @DatabaseField(columnName = CityConst.CITY_ID_FIELD_NAME,dataType = DataType.INTEGER)
-    private var cityId: Int = 0,
+    var parent: String? = null,
+    @DatabaseField(columnName = CityConst.CITY_ID_FIELD_NAME,dataType = DataType.STRING)
+    var cityId: String? = null,
     @DatabaseField(columnName = CityConst.CITY_NAME_FIELD_NAME,dataType = DataType.STRING)
-    private var cityName: String? = null,
+    var cityName: String? = null,
     @DatabaseField(columnName = CityConst.CITY_NAME_EN_FIELD_NAME,dataType = DataType.STRING)
-    private var cityNameEn: String? = null,
+    var cityNameEn: String? = null,
     @DatabaseField(columnName = CityConst.LON_FIELD_NAME,dataType = DataType.STRING)
-    private var lon: String? = null,
+    var lon: String? = null,
     @DatabaseField(columnName = CityConst.LAT_FIELD_NAME,dataType = DataType.STRING)
-    private var lat: String? = null
-){
-
-}
+    var lat: String? = null
+)
 
 class CityConst {
     companion object {

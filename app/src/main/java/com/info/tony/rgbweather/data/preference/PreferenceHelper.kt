@@ -37,7 +37,7 @@ object PreferenceHelper {
     }
 
     fun removeConfigurationListener(listener: ConfigurationListener) {
-        CONFIGURATION_LISTENERS!!.remove(listener)
+        CONFIGURATION_LISTENERS.remove(listener)
     }
 
     fun getSharedPreferences(): SharedPreferences {

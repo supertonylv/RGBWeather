@@ -1,13 +1,14 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
-def supportVersion = "27.0.0"
-def rxBindingVersion = "0.4.0"
-def retrofitVersion = "2.2.0"
+def supportVersion = "27.0.2"
+def rxBindingVersion = "2.1.1"
+def retrofitVersion = "2.3.0"
 def okHttpVersion = "3.7.0"
 def stethoVersion = "1.5.0"
-def butterKnifeVersion = "8.5.1"
-def daggerVersion = "2.8"
+def butterKnifeVersion = "8.8.1"
+def kotterKnifeVersion = "0.1.0-SNAPSHOT"
+def daggerVersion = "2.15"
 def ormLiteVersion = "5.1"
-def fastJsonVersion = "1.2.36"
+def gsonVersion = "2.8.2"
 def anko_version = "0.10.4"
 def kotlin_version = "1.2.30"
 def constraint_version = "1.0.2"
@@ -32,28 +33,29 @@ project.ext {
             "cardview"                    : "com.android.support:cardview-v7:${supportVersion}",
             "constraint-layout"           : "com.android.support.constraint:constraint-layout:${constraint_version}",
 
-            //java8-support
-            "stream"                      : "com.annimon:stream:1.0.8",
-
             //kotlin
             "kotlin" : "org.jetbrains.kotlin:kotlin-stdlib-jre7:${kotlin_version}",
             "anko"   : "org.jetbrains.anko:anko:${anko_version}",
 
             //rx
+            "rxjava"                   : "io.reactivex.rxjava2:rxjava:2.1.10",
             "rxandroid"                   : "io.reactivex.rxjava2:rxandroid:2.0.2",
-            "rxbinding"                   : "com.jakewharton.rxbinding:rxbinding:${rxBindingVersion}",
-            "rxbinding-support-v4"        : "com.jakewharton.rxbinding:rxbinding-support-v4:${rxBindingVersion}",
-            "rxbinding-appcompat-v7"      : "com.jakewharton.rxbinding:rxbinding-appcompat-v7:${rxBindingVersion}",
-            "rxbinding-design"            : "com.jakewharton.rxbinding:rxbinding-design:${rxBindingVersion}",
-            "rxbinding-recyclerview-v7"   : "com.jakewharton.rxbinding:rxbinding-recyclerview-v7:${rxBindingVersion}",
+            "rxbinding"                   : "com.jakewharton.rxbinding2:rxbinding-kotlin:${rxBindingVersion}",
+            "rxbinding-support-v4"        : "com.jakewharton.rxbinding2:rxbinding-support-v4-kotlin:${rxBindingVersion}",
+            "rxbinding-appcompat-v7"      : "com.jakewharton.rxbinding2:rxbinding-appcompat-v7-kotlin:${rxBindingVersion}",
+            "rxbinding-design"            : "com.jakewharton.rxbinding2:rxbinding-design-kotlin:${rxBindingVersion}",
+            "rxbinding-recyclerview-v7"   : "com.jakewharton.rxbinding2:rxbinding-recyclerview-v7-kotlin:${rxBindingVersion}",
 
             //retrofit
             "retrofit"                    : "com.squareup.retrofit2:retrofit:${retrofitVersion}",
-            "adapter-rxjava"              : "com.squareup.retrofit2:adapter-rxjava:${retrofitVersion}",
+            "adapter-rxjava"              : "com.squareup.retrofit2:adapter-rxjava2:${retrofitVersion}",
 
             //dagger
             "dagger"                      : "com.google.dagger:dagger:${daggerVersion}",
-            "dagger-compiler"             : "com.google.dagger:dagger-compiler:${daggerVersion}",
+            "dagger-android"              : "com.google.dagger:dagger-android:${daggerVersion}",
+            "dagger-support"              : "com.google.dagger:dagger-android-support:${daggerVersion}",
+            "dagger-processor"             : "com.google.dagger:dagger-android-processor:${daggerVersion}",
+            "dagger-android-processor"             : "com.google.dagger:dagger-compiler:${daggerVersion}",
 
             //facebook
             "stetho"                      : "com.facebook.stetho:stetho:${stethoVersion}",
@@ -62,12 +64,14 @@ project.ext {
             //others
             "okhttp3-logging-interceptor" : "com.squareup.okhttp3:logging-interceptor:${okHttpVersion}",
             "ormlite-android"             : "com.j256.ormlite:ormlite-android:${ormLiteVersion}",
-            "fastjson"                    : "com.alibaba:fastjson:${fastJsonVersion}",
+            "gson"                        : "com.google.code.gson:gson:${gsonVersion}",
             "butterknife"                 : "com.jakewharton:butterknife:${butterKnifeVersion}",
+            "kotterknife"                 : "com.jakewharton:kotterknife:${kotterKnifeVersion}",
             "butterknife-compiler"        : "com.jakewharton:butterknife-compiler:${butterKnifeVersion}",
-            "retrofit2-fastjson-converter": "org.ligboy.retrofit2:converter-fastjson-android:2.1.0",
+            "retrofit2-gson-converter": "com.squareup.retrofit2:converter-gson:$retrofitVersion",
             "SmartRefreshLayout"          : "com.scwang.smartrefresh:SmartRefreshLayout:1.0.3",
-            "SmartRefreshHeader"          : "com.scwang.smartrefresh:SmartRefreshHeader:1.0.3"
+            "SmartRefreshHeader"          : "com.scwang.smartrefresh:SmartRefreshHeader:1.0.3",
+            "statusbarHelp"               : "com.jaeger.statusbarutil:library:1.5.0"
 
 
     ]

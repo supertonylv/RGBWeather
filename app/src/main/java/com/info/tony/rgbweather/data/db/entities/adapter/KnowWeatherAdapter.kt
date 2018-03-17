@@ -15,11 +15,11 @@ open class KnowWeatherAdapter:WeatherAdapter {
     private var knowWeather: KnowWeather
 
     constructor(knowWeather: KnowWeather){
-        this.knowWeather = knowWeather;
+        this.knowWeather = knowWeather
     }
 
     override fun getCityId(): String {
-        return knowWeather?.cityId ?:""
+        return knowWeather.cityId ?:""
     }
 
     override fun getCityName(): String {

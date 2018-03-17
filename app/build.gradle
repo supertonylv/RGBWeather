@@ -3,6 +3,7 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 
 apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-kapt'
 
 android {
     compileSdkVersion rootProject.ext.android.compileSdkVersion
@@ -29,23 +30,27 @@ dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation 'com.android.support.constraint:constraint-layout:1.0.2'
     testImplementation 'junit:junit:4.12'
-    androidTestImplementation 'com.android.support.test:runner:1.0.1'
+//    androidTestImplementation 'com.android.support.test:runner:1.0.1'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
     compile 'com.android.support:multidex:1.0.1'
-
 
     //kotlin
     implementation rootProject.ext.dependencies["kotlin"]
     implementation rootProject.ext.dependencies["anko"]
     implementation project(':library')
-//    implementation project(':widget')
+    implementation project(':widget')
 
-    implementation rootProject.ext.dependencies["butterknife"]
+    compile rootProject.ext.dependencies["butterknife"]
+    compile rootProject.ext.dependencies["kotterknife"]
     annotationProcessor rootProject.ext.dependencies["butterknife-compiler"]
 
-    implementation rootProject.ext.dependencies["dagger"]
-    annotationProcessor rootProject.ext.dependencies["dagger-compiler"]
+    compile rootProject.ext.dependencies["dagger"]
+    compile rootProject.ext.dependencies["dagger-android"]
+    compile rootProject.ext.dependencies["dagger-support"]
+    kapt rootProject.ext.dependencies["dagger-processor"]
+    kapt rootProject.ext.dependencies["dagger-android-processor"]
 
-    implementation rootProject.ext.dependencies["retrofit2-fastjson-converter"]
+    implementation rootProject.ext.dependencies["retrofit2-gson-converter"]
     implementation rootProject.ext.dependencies["constraint-layout"]
+    implementation rootProject.ext.dependencies["statusbarHelp"]
 }

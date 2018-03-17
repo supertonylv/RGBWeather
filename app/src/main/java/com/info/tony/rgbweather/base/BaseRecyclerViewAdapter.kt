@@ -12,7 +12,7 @@ open abstract class BaseRecyclerViewAdapter<T : RecyclerView.ViewHolder> :Recycl
     protected var onItemClickListener: AdapterView.OnItemClickListener? = null
 
     fun setOnItemClickListenser(onItemClickListener: AdapterView.OnItemClickListener) {
-        this.onItemClickListener = onItemClickListener;
+        this.onItemClickListener = onItemClickListener
     }
 
     fun onItemHolderClick(vh:RecyclerView.ViewHolder?) {

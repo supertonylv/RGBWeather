@@ -13,8 +13,8 @@ import javax.inject.Inject
  * Created by lvlu on 2018/3/11.
  */
 class CityDao {
-    private val cityDaoOperation: Dao<City, Int>?
-    private val hotCityDaoOperation: Dao<HotCity, Int>?
+    val cityDaoOperation: Dao<City, Int>?
+    val hotCityDaoOperation: Dao<HotCity, Int>?
 
     @Inject
     constructor(context: Context){

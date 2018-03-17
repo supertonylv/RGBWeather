@@ -7,5 +7,4 @@ data class WeatherDeatail(
         var iconResourceId: Int = 0,
         var key: String? = null,
         var value: String? = null
-) {
-}
+)

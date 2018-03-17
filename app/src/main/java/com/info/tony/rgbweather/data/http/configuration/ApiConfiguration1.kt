@@ -18,21 +18,22 @@ open class ApiConfiguration1 private constructor(val dataSourceType:Int){
         constructor(init:Builder.() -> Unit) : this() {
             init()
         }
-        public var dataSourceType:Int = ApiConstants.WEATHER_DATA_SOURCE_TYPE_ENVIRONMENT_CLOUD
+
+        var dataSourceType:Int = ApiConstants.WEATHER_DATA_SOURCE_TYPE_ENVIRONMENT_CLOUD
 
 //        fun setDataSourceType(type:Int) {
 //            dataSourceType = type;
 //        }
         //DSL
         fun setDataSourceType(init:Builder.() -> Int) = apply {
-                var temp = init();
-                if(temp != ApiConstants.WEATHER_DATA_SOURCE_TYPE_ENVIRONMENT_CLOUD && temp != ApiConstants.WEATHER_DATA_SOURCE_TYPE_KNOW
+                var temp = init()
+    if(temp != ApiConstants.WEATHER_DATA_SOURCE_TYPE_ENVIRONMENT_CLOUD && temp != ApiConstants.WEATHER_DATA_SOURCE_TYPE_KNOW
                     && temp != ApiConstants.WEATHER_DATA_SOURCE_TYPE_MI) {
                     throw RuntimeException("the dataSourceType does not support")
                 }
                 dataSourceType = init()
         }
 
-        fun build() = ApiConfiguration1(this);
+        fun build() = ApiConfiguration1(this)
     }
 }

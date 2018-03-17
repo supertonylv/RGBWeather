@@ -10,17 +10,16 @@ import com.j256.ormlite.table.DatabaseTable
 @DatabaseTable(tableName = "LifeIndex")
 data class LifeIndex(
         @DatabaseField(columnName = LifeIndexConst.ID_FIELD_NAME, generatedId = true,dataType = DataType.LONG)
-        private var id: Long = 0,//数据库自增长ID
+        var id: Long = 0,//数据库自增长ID
         @DatabaseField(columnName =  LifeIndexConst.CITY_ID_FIELD_NAME,dataType = DataType.STRING)
-        private var cityId: String? = null,
+        var cityId: String? = null,
         @DatabaseField(columnName =  LifeIndexConst.NAME_ID_FIELD_NAME,dataType = DataType.STRING)
-        private var name: String? = null,
+        var name: String? = null,
         @DatabaseField(columnName =  LifeIndexConst.INDEX_ID_FIELD_NAME,dataType = DataType.STRING)
-        private var index: String? = null,
+        var index: String? = null,
         @DatabaseField(columnName =  LifeIndexConst.DETAILS_ID_FIELD_NAME,dataType = DataType.STRING)
-        private var details: String? = null
-) {
-}
+        var details: String? = null
+)
 
 class LifeIndexConst{
     companion object {

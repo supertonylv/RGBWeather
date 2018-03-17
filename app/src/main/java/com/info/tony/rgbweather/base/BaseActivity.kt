@@ -17,7 +17,7 @@ open class BaseActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         val id = item?.itemId
         if(id == android.R.id.home) {
-            finish();
+            finish()
             return true
         }
         return super.onOptionsItemSelected(item)

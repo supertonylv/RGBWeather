@@ -1,19 +1,19 @@
 package com.info.tony.rgbweather.data.http.entity.mi
 
-import com.alibaba.fastjson.annotation.JSONField
+import com.google.gson.annotations.SerializedName
 
 /**
  * Created by lvlu on 2018/3/9.
  */
 data class MiForecast(
-        @JSONField(name = "city")
+        @SerializedName("city")
         var cityName: String? = null,
-        @JSONField(name = "city_en")
+        @SerializedName("city_en")
         var cityEn: String? = null,
-        @JSONField(name = "cityid")
+        @SerializedName("cityid")
         var cityId: String? = null,
         var date: String? = null,
-        @JSONField(name = "date_y")
+        @SerializedName("date_y")
         var dateY: String? = null,
         var fl1: String? = null,
         var fl2: String? = null,

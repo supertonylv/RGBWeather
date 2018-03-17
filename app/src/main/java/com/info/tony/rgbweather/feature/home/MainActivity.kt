@@ -1,6 +1,12 @@
 package com.info.tony.rgbweather.feature.home
 
+import android.content.Intent
+import android.graphics.Color
+import android.icu.util.Calendar
+import android.os.Build
 import android.os.Bundle
+import android.os.Handler
+import android.support.design.widget.CollapsingToolbarLayout
 import android.support.design.widget.FloatingActionButton
 import android.support.design.widget.Snackbar
 import android.support.design.widget.NavigationView
@@ -12,115 +18,151 @@ import android.support.v7.widget.Toolbar
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
+import android.view.WindowManager
+import android.widget.ImageView
+import android.widget.TextView
+import butterknife.BindView
+import butterknife.ButterKnife
+import com.info.tony.library.util.ActivityUtils
+import com.info.tony.library.util.DateConvertUtils
 import com.info.tony.rgbweather.R
+import com.info.tony.rgbweather.WeatherApplication
 import com.info.tony.rgbweather.base.BaseActivity
 import com.info.tony.rgbweather.data.db.dao.WeatherDao
 import com.info.tony.rgbweather.data.db.entities.rgblist.Weather
 import com.info.tony.rgbweather.data.preference.PreferenceHelper
 import com.info.tony.rgbweather.data.preference.WeatherSettings
 import com.info.tony.rgbweather.data.repository.WeatherDataRepository
+import com.info.tony.rgbweather.feature.WeatherDrawableUtil
+import com.info.tony.rgbweather.feature.home.drawer.DrawerMenuFragment
+import com.info.tony.rgbweather.feature.home.drawer.DrawerMenuPresenter
+import com.info.tony.rgbweather.feature.selectcity.SelectCityActivity
+import com.info.tony.rgbweather.feature.setting.AboutActivity
+import com.scwang.smartrefresh.layout.SmartRefreshLayout
+import com.scwang.smartrefresh.layout.header.ClassicsHeader
+import com.scwang.smartrefresh.layout.listener.OnRefreshListener
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_main.*
+import kotterknife.bindView
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.find
-import rx.*
-import rx.Observable
-import rx.Observer
-import java.util.*
-import rx.android.plugins.RxAndroidSchedulersHook
-import rx.android.schedulers.AndroidSchedulers
-import rx.functions.Action
-import rx.functions.Action1
-import rx.schedulers.Schedulers
+import javax.inject.Inject
 
-class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedListener {
+class MainActivity : BaseActivity(), HomePageFragment.OnFragmentInteractionListener, DrawerMenuFragment.OnSelectCity {
 
 
-    private var drawerLayout:DrawerLayout?= null
+    val smartRefreshLayout: SmartRefreshLayout? by bindView(R.id.refresh_layout)
+
+     val collapsingToolbarLayout: CollapsingToolbarLayout? by bindView(R.id.collapsing_toolbar)
+     val toolbar: Toolbar? by bindView(R.id.toolbar)
+     val drawerLayout: DrawerLayout? by bindView(R.id.drawer_layout)
+
+    //基本天气信息
+     val tempTextView: TextView? by bindView(R.id.temp_text_view)
+     val weatherNameTextView: TextView? by bindView(R.id.weather_text_view)
+     val realTimeTextView: TextView? by bindView(R.id.publish_time_text_view)
+     val weatherImageView: ImageView? by bindView(R.id.weather_icon_image_view)
+
+    @Inject
+    lateinit var homePagePresenter: HomePagePresenter
+    lateinit var drawerMenuPresenter: DrawerMenuPresenter
+
+    private var currentCityId: String? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
-        val toolbar = find<Toolbar>(R.id.toolbar)
-        setSupportActionBar(toolbar)
 
-        val fab = find<FloatingActionButton>(R.id.fab)
-        fab.setOnClickListener { view ->
-            Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                    .setAction("Action", null).show()
-            val cityId = PreferenceHelper.getSharedPreferences().getString(WeatherSettings.SETTINGS_CURRENT_CITY_ID.getId(),"");
-            Log.e("xxxxx","cityId"+cityId)
-            WeatherDataRepository.getWeather(this@MainActivity,cityId,WeatherDao(context = this@MainActivity),true)
-                    ?.subscribeOn(Schedulers.io())
-                     ?.observeOn(AndroidSchedulers.mainThread())
-//                     ?.subscribe(Action1 { displayWeather(it) }, Action1 {  })
-                    ?.subscribe(Action1<Weather>(){
-                        displayWeather(it)
-                    })
-
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            val window = window
+            window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
+            window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN or View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
+            window.statusBarColor = Color.TRANSPARENT
         }
 
-        drawerLayout = find<DrawerLayout>(R.id.drawer_layout)
+        setContentView(R.layout.activity_main)
+
+        setSupportActionBar(toolbar)
+
+        //设置 Header 为 Material风格
+        val header = ClassicsHeader(this)
+        header.setPrimaryColors(this.resources.getColor(R.color.colorPrimary), Color.WHITE)
+        this.smartRefreshLayout?.setRefreshHeader(header)
+        this.smartRefreshLayout?.setOnRefreshListener { refreshLayout -> homePagePresenter?.loadWeather(currentCityId?:"", true) }
+
         val toggle = ActionBarDrawerToggle(
                 this, drawerLayout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close)
+        assert(drawerLayout != null)
         drawerLayout?.addDrawerListener(toggle)
         toggle.syncState()
 
-        val navView = find<NavigationView>(R.id.nav_view)
-        navView.setNavigationItemSelectedListener(this)
-    }
+        var homePageFragment: HomePageFragment? = supportFragmentManager.findFragmentById(R.id.fragment_container) as? HomePageFragment
+        if (homePageFragment == null) {
+            homePageFragment = HomePageFragment.newInstance()
+            ActivityUtils.addFragmentToActivity(supportFragmentManager, homePageFragment, R.id.fragment_container)
+        }
 
-    fun displayWeather(weather: Weather){
-        Log.e("xxx","weather = "+ weather.cityName)
+        DaggerHomePageComponent.builder()
+                .applicationComponent(WeatherApplication.instance.applicationComponent)
+                .homePageModule(HomePageModule(homePageFragment))
+                .build().inject(this)
+
+        var drawerMenuFragment: DrawerMenuFragment? = supportFragmentManager.findFragmentById(R.id.fragment_container_drawer_menu) as? DrawerMenuFragment
+        if (drawerMenuFragment == null) {
+            drawerMenuFragment = DrawerMenuFragment.newInstance(1)
+            ActivityUtils.addFragmentToActivity(supportFragmentManager, drawerMenuFragment, R.id.fragment_container_drawer_menu)
+        }
+
+        drawerMenuPresenter = DrawerMenuPresenter(this, drawerMenuFragment)
     }
 
     override fun onBackPressed() {
-        if (drawerLayout?.isDrawerOpen(GravityCompat.START) ?: false) {
-            drawer_layout.closeDrawer(GravityCompat.START)
+        val drawer = find(R.id.drawer_layout) as DrawerLayout
+        if (drawer.isDrawerOpen(GravityCompat.START)) {
+            drawer.closeDrawer(GravityCompat.START)
         } else {
             super.onBackPressed()
         }
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        // Inflate the menu; this adds items to the action bar if it is present.
         menuInflater.inflate(R.menu.main, menu)
         return true
     }
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        when (item?.itemId) {
-            R.id.action_settings -> return true
-            else -> return super.onOptionsItemSelected(item)
+        val id = item?.itemId
+        if (id == R.id.action_settings) {
+            startActivity(Intent(this,AboutActivity::class.java))
+            return true
         }
+        return super.onOptionsItemSelected(item)
     }
 
-    override fun onNavigationItemSelected(item: MenuItem): Boolean {
-        // Handle navigation view item clicks here.
-        when (item.itemId) {
-            R.id.nav_camera -> {
-                // Handle the camera action
-            }
-            R.id.nav_gallery -> {
+    override fun updatePageTitle(weather: Weather) {
+        currentCityId = weather.cityId
+        smartRefreshLayout?.finishRefresh()
+        toolbar?.title = weather.cityName
+        collapsingToolbarLayout?.title = weather.cityName
 
-            }
-            R.id.nav_slideshow -> {
+        tempTextView?.text = weather.weatherLive?.temp
+        weatherNameTextView?.setText(weather.weatherLive?.weather)
+        weatherImageView?.setImageResource(WeatherDrawableUtil.getDrawableByWeather(weather.weatherLive?.weather))
+        realTimeTextView?.text = getString(R.string.string_publish_time) + DateConvertUtils.timeStampToDate(weather.weatherLive?.time?:System.currentTimeMillis(), DateConvertUtils.DATA_FORMAT_PATTEN_YYYY_MM_DD_HH_MM)
+    }
 
-            }
-            R.id.nav_manage -> {
+    override fun addOrUpdateCityListInDrawerMenu(weather: Weather) {
+        drawerMenuPresenter.loadSavedCities()
+    }
 
-            }
-            R.id.nav_share -> {
+    override fun onSelect(cityId: String) {
 
-            }
-            R.id.nav_send -> {
-
-            }
-        }
-
+        assert(drawerLayout != null)
         drawerLayout?.closeDrawer(GravityCompat.START)
-        return true
+
+        Handler().postDelayed({ homePagePresenter?.loadWeather(cityId, false) }, 250)
     }
 }
 

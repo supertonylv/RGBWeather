@@ -1,18 +1,19 @@
 package com.info.tony.rgbweather.data.http.entity.mi
 
-import com.alibaba.fastjson.annotation.JSONField
+import com.google.gson.annotations.SerializedName
+
 
 /**
  * Created by lvlu on 2018/3/9.
  */
 data class MiRealTime(
-        @JSONField(name = "SD")
+        @SerializedName("SD")
         var humidity: String? = null,//湿度
-        @JSONField(name = "WD")
+        @SerializedName("WD")
         var wind: String? = null,//风向
-        @JSONField(name = "WS")
+        @SerializedName("WS")
         var windSpeed: String? = null,//风速
-        @JSONField(name = "cityid")
+        @SerializedName("cityid")
         var cityId: String? = null,
         var temp: String? = null,//温度
         var time: String? = null,//发布时间

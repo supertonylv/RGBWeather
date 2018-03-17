@@ -47,7 +47,7 @@ open class CloudWeatherAdapter:WeatherAdapter {
     }
 
     override fun getCityId(): String {
-        var cityId =  cloudWeatherLive?.citycode ?:"11111"
+        var cityId =  cloudWeatherLive?.cityId ?:"11111"
         return cityId
     }
 
@@ -61,7 +61,7 @@ open class CloudWeatherAdapter:WeatherAdapter {
 
     override fun getWeatherLive(): WeatherLive {
         var date:Long = DateConvertUtils.dateToTimeStamp(cloudWeatherLive?.updateTime ?: "",DateConvertUtils.DATA_FORMAT_PATTEN_YYYY_MM_DD_HH_MM)
-        val weatherLive = WeatherLive(cloudWeatherLive?.citycode,cloudWeatherLive?.phenomena,cloudWeatherLive?.temperature,cloudWeatherLive?.humidity,
+        val weatherLive = WeatherLive(cloudWeatherLive?.cityId,cloudWeatherLive?.phenomena,cloudWeatherLive?.temperature,cloudWeatherLive?.humidity,
                 cloudWeatherLive?.windDirect,cloudWeatherLive?.windSpeed,date,cloudWeatherLive?.windPower,cloudWeatherLive?.rain,
                 cloudWeatherLive?.feelsTemperature,cloudWeatherLive?.airPressure)
         return weatherLive
@@ -83,8 +83,8 @@ open class CloudWeatherAdapter:WeatherAdapter {
                         tempMax = it.tmp?.max?.toInt() ?:0,
                         tempMin = it.tmp?.min?.toInt() ?: 0,
                         wind = it.wind?.dir,
-                        date = DateConvertUtils.convertDataToString(it?.date ?:""),
-                        week = DateConvertUtils.convertDataToWeek(it?.date ?: ""),
+                        date = DateConvertUtils.convertDataToString(it.date ?:""),
+                        week = DateConvertUtils.convertDataToWeek(it.date ?: ""),
                         pop = it.pop,
                         uv = it.uv,
                         visibility = it.vis,

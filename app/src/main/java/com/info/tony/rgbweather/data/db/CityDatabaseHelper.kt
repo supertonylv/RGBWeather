@@ -30,9 +30,7 @@ class CityDatabaseHelper: OrmLiteSqliteOpenHelper {
         val innerSingle = CityDatabaseHelper(WeatherApplication.instance)
     }
 
-   constructor(context: Context):super(context,DATABASE_NAME, null,DATABASE_VERSION){
-
-   }
+   constructor(context: Context):super(context,DATABASE_NAME, null,DATABASE_VERSION)
 
     override fun onCreate(database: SQLiteDatabase, connectionSource: ConnectionSource) {
         //由于城市数据库是由外部导入的，故不需要创建执行创建表的操作
@@ -65,20 +63,20 @@ class CityDatabaseHelper: OrmLiteSqliteOpenHelper {
     fun importCityDB() {
         Log.e("xxxxx","importCityDB")
         // 判断保持城市的数据库文件是否存在
-        val file = File(WeatherApplication.instance.getDatabasePath(DATABASE_NAME).getAbsolutePath())
+        val file = File(WeatherApplication.instance.getDatabasePath(DATABASE_NAME).absolutePath)
         if (!file.exists()) {// 如果不存在，则导入数据库文件
             Log.e("xxxxx","import Db!")
             //数据库文件
             val dbFile = WeatherApplication.instance.getDatabasePath(DATABASE_NAME)
             try {
-                if (!dbFile.getParentFile().exists()) {
-                    dbFile.getParentFile().mkdir()
+                if (!dbFile.parentFile.exists()) {
+                    dbFile.parentFile.mkdir()
                 }
                 if (!dbFile.exists()) {
                     dbFile.createNewFile()
                 }
                 //加载欲导入的数据库
-                val inputStream = WeatherApplication.instance.getResources().openRawResource(R.raw.city)
+                val inputStream = WeatherApplication.instance.resources.openRawResource(R.raw.city)
                 val fos = FileOutputStream(dbFile)
                 val buffer = ByteArray(inputStream.available())
                 inputStream.read(buffer)

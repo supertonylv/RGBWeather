@@ -10,14 +10,13 @@ import com.j256.ormlite.table.DatabaseTable
 @DatabaseTable(tableName = "HotCity")
 data class HotCity(
         @DatabaseField(columnName = HotCityConst.ID_FIELD_NAME, generatedId = true,dataType = DataType.INTEGER)
-        private val id: Int = 0,
+        val id: Int = 0,
 
-        @DatabaseField(columnName = HotCityConst.CITY_ID_FIELD_NAME,dataType = DataType.STRING)
-        private var cityId: Int = 0,
+        @DatabaseField(columnName = HotCityConst.CITY_ID_FIELD_NAME,dataType = DataType.STRING_BYTES)
+        var cityId: Int = 0,
 
         @DatabaseField(columnName = HotCityConst.CITY_NAME_FIELD_NAME,dataType = DataType.STRING)
-        private var cityName: String? = null) {
-}
+        var cityName: String? = null)
 
 class HotCityConst {
     companion object {

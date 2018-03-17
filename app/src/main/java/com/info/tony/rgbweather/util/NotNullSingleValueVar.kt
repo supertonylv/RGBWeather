@@ -6,7 +6,7 @@ import kotlin.reflect.KProperty
 /**
  * Created by lvlu on 2018/3/11.
  */
-open class NotNullSingleValueVar<T>():ReadWriteProperty<Any?,T> {
+open class NotNullSingleValueVar<T> :ReadWriteProperty<Any?,T> {
 
     private var value : T? = null
     override fun getValue(thisRef: Any?, property: KProperty<*>): T {

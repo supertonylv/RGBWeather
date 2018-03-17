@@ -1,6 +1,7 @@
 package com.info.tony.rgbweather.data.http.entity.envicloud
 
-import com.alibaba.fastjson.annotation.JSONField
+import com.google.gson.annotations.SerializedName
+
 
 /**
  * 天气实况
@@ -25,38 +26,38 @@ open class EnvironmentCloudWeatherLive (
      * phenomena : 阵雨
      */
 
-    @JSONField(name = "rcode")
+    @SerializedName("rcode")
     var requestCode: Int = 0,//结果吗
 
-    @JSONField(name = "rdesc")
+    @SerializedName("rdesc")
     var requestDesc: String? = null,//结果描述
 
-    @JSONField(name = "updatetime")
+    @SerializedName("updatetime")
     var updateTime: String? = null,//更新时间
 
     var phenomena: String? = null,//天气现象
 
     var temperature: String? = null,//气温(℃)
 
-    @JSONField(name = "feelst")
+    @SerializedName("feelst")
     var feelsTemperature: String? = null,//体感温度(℃)
 
-    @JSONField(name = "airpressure")
+    @SerializedName("airpressure")
     var airPressure: String? = null,//气压(hPa)
 
     var humidity: String? = null,//相对湿度(%)
 
     var rain: String? = null,//降雨量(mm)
 
-    @JSONField(name = "winddirect")
+    @SerializedName("winddirect")
     var windDirect: String? = null,//风向
 
-    @JSONField(name = "windpower")
+    @SerializedName("windpower")
     var windPower: String? = null,//风力
 
-    @JSONField(name = "windspeed")
+    @SerializedName("windspeed")
     var windSpeed: String? = null,//风速(m/s)
 
-    @JSONField(name = "citycode")
-    var citycode: String? = null//城市ID
+    @SerializedName("citycode")
+    var cityId: String? = null//城市ID
 )

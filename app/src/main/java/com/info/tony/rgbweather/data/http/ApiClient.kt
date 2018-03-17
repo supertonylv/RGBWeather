@@ -9,8 +9,8 @@ import com.info.tony.rgbweather.data.http.service.WeatherService
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
-import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory
-import retrofit2.converter.fastjson.FastJsonConverterFactory
+import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
+import retrofit2.converter.gson.GsonConverterFactory
 import kotlin.reflect.KClass
 
 /**
@@ -18,13 +18,13 @@ import kotlin.reflect.KClass
  */
 object ApiClient {
 
-    public var weatherService: WeatherService? = null;
-    public var environmentCloudWeatherService: EnvironmentCloudWeatherService? = null
+    var weatherService: WeatherService? = null
+    var environmentCloudWeatherService: EnvironmentCloudWeatherService? = null
 
-    public var apiConfiguration: ApiConfiguration1? = null;
+    var apiConfiguration: ApiConfiguration1? = null
 
-    public fun init(configuration: ApiConfiguration1?) {
-        apiConfiguration = configuration;
+    fun init(configuration: ApiConfiguration1?) {
+        apiConfiguration = configuration
         when(configuration?.dataSourceType) {
             ApiConstants.WEATHER_DATA_SOURCE_TYPE_KNOW -> weatherService = initWeatherService<WeatherService>(ApiConstants.KNOW_WEATHER_API_HOST,WeatherService::class.java)
             ApiConstants.WEATHER_DATA_SOURCE_TYPE_ENVIRONMENT_CLOUD -> environmentCloudWeatherService = initWeatherService(ApiConstants.ENVIRONMENT_CLOUD_WEATHER_API_HOST,EnvironmentCloudWeatherService::class.java)
@@ -50,8 +50,8 @@ object ApiClient {
 
         val retrofit = Retrofit.Builder()
                 .baseUrl(baseUrl)
-                .addConverterFactory(FastJsonConverterFactory.create())
-                .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
+                .addConverterFactory(GsonConverterFactory.create())
+                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .client(client)
                 .build()
 

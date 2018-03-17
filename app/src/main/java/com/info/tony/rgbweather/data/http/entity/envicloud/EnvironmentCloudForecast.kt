@@ -1,6 +1,7 @@
 package com.info.tony.rgbweather.data.http.entity.envicloud
 
-import com.alibaba.fastjson.annotation.JSONField
+import com.google.gson.annotations.SerializedName
+
 
 /**
  * citycode : 101020100
@@ -13,18 +14,18 @@ import com.alibaba.fastjson.annotation.JSONField
  * Created by lvlu on 2018/3/9.
  */
 data class EnvironmentCloudForecast(
-        @JSONField(name = "rcode")
+        @SerializedName("rcode")
         var requestCode: Int = 0,//结果吗
 
-        @JSONField(name = "rdesc")
+        @SerializedName("rdesc")
         var requestDesc: String? = null,//结果描述
 
         var suggestion: SuggestionEntity? = null,//生活指数
 
-        @JSONField(name = "citycode")
+        @SerializedName("citycode")
         var cityId: String? = null,//城市ID
 
-        @JSONField(name = "cityname")
+        @SerializedName("cityname")
         var cityName: String? = null,//城市名
 
         var forecast: List<ForecastEntity>? = null//天气预报

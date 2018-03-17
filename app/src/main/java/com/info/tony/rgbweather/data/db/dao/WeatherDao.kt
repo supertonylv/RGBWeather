@@ -5,6 +5,7 @@ import com.info.tony.rgbweather.data.db.WeatherDatabaseHelper
 import com.info.tony.rgbweather.data.db.entities.rgblist.*
 import com.j256.ormlite.dao.Dao
 import com.j256.ormlite.misc.TransactionManager
+import retrofit2.Call
 import java.sql.SQLException
 import java.util.concurrent.Callable
 import javax.inject.Inject
@@ -34,7 +35,7 @@ class WeatherDao {
     @Throws(SQLException::class)
     fun queryWeather(cityId: String): Weather? {
 
-        return TransactionManager.callInTransaction(WeatherDatabaseHelper.instance(context).getConnectionSource()) {
+        return TransactionManager.callInTransaction(WeatherDatabaseHelper.instance(context).connectionSource) {
             val weather = weatherDaoOperation?.queryForId(cityId)
             if (weather != null) {
                 weather.airQualityLive = apiDaoOperation?.queryForId(cityId)
@@ -49,16 +50,16 @@ class WeatherDao {
     @Throws(SQLException::class)
     fun insertOrUpdateWeather(weather: Weather) {
 
-        TransactionManager.callInTransaction(WeatherDatabaseHelper.instance(context).getConnectionSource(), {
+        TransactionManager.callInTransaction(WeatherDatabaseHelper.instance(context).connectionSource,Callable<Void> {
             if (weatherDaoOperation != null) {
-            if (weatherDaoOperation?.idExists(weather.cityId)) {
+            if (weatherDaoOperation.idExists(weather.cityId)) {
                 updateWeather(weather)
             } else {
                 insertWeather(weather)
             }
             }
             null
-        } as Callable<Void>)
+        } )
     }
 
     @Throws(SQLException::class)
@@ -82,7 +83,7 @@ class WeatherDao {
     @Throws(SQLException::class)
     fun queryAllSaveCity(): List<Weather>? {
 
-        return TransactionManager.callInTransaction(WeatherDatabaseHelper.instance(context).getConnectionSource()) {
+        return TransactionManager.callInTransaction(WeatherDatabaseHelper.instance(context).connectionSource) {
 
             val weatherList = weatherDaoOperation?.queryForAll()
             weatherList?.forEach {

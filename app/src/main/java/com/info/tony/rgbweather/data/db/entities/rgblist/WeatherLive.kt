@@ -32,5 +32,4 @@ data class WeatherLive(
          var feelsTemperature: String? = null,//体感温度(℃)
         @DatabaseField(columnName = "airPressure",dataType = DataType.STRING)
          var airPressure: String? = null//气压(hPa)
-) {
-}
+)
