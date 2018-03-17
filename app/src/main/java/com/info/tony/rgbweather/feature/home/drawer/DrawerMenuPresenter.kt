@@ -79,7 +79,7 @@ class DrawerMenuPresenter @Inject constructor(context: Context, val view: Drawer
     }
 
     private fun deleteCityFromDBAndReturnCurrentCityId(cityId: String): String {
-        var currentCityId = PreferenceHelper.getSharedPreferences().getString(WeatherSettings.SETTINGS_CURRENT_CITY_ID.getId(), "")
+        var currentCityId = PreferenceHelper.getSharedPreferences().getString(WeatherSettings.SETTINGS_CURRENT_CITY_ID.getId(), "101020100")
         try {
             weatherDao?.deleteById(cityId)
             if (cityId == currentCityId) {//说明删除的是当前选择的城市，所以需要重新设置默认城市

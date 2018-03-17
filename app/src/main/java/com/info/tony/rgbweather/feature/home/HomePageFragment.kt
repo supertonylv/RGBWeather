@@ -125,14 +125,14 @@ class HomePageFragment : BaseFragment(), HomePageContract.View {
     override fun onResume() {
         super.onResume()
         assert(presenter != null)
-        presenter!!.subscribe()
+        presenter?.subscribe()
     }
 
     @SuppressLint("SetTextI18n")
     override fun displayWeatherInformation(weather: Weather) {
 
         this.weather = weather
-        onFragmentInteractionListener!!.updatePageTitle(weather)
+        onFragmentInteractionListener?.updatePageTitle(weather)
 
         val airQualityLive = weather.airQualityLive
         aqiIndicatorView?.setIndicatorValue(airQualityLive?.aqi ?: 0)

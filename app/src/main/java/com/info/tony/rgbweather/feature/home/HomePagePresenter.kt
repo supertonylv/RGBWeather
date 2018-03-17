@@ -46,7 +46,7 @@ class HomePagePresenter : HomePageContract.Presenter {
     }
 
     override fun subscribe() {
-        val cityId = PreferenceHelper.getSharedPreferences().getString(WeatherSettings.SETTINGS_CURRENT_CITY_ID.getId(), "")
+        val cityId = PreferenceHelper.getSharedPreferences().getString(WeatherSettings.SETTINGS_CURRENT_CITY_ID.getId(), "101020100")
         loadWeather(cityId, false)
     }
 

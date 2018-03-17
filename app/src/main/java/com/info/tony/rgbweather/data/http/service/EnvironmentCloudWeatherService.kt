@@ -20,7 +20,7 @@ interface EnvironmentCloudWeatherService {
      * @param cityId 城市id
      * @return Observable
      */
-    @GET("/v2/weatherlive/YMFYB256AGFUZZE0ODQ3MZM1MZE2NTU=/{cityId}")
+    @GET("/v2/weatherlive/CM9IYMLUC2GXNTIXMJGZMZI0OTY2/{cityId}")
     fun getWeatherLive(@Path("cityId") cityId: String): Observable<EnvironmentCloudWeatherLive>
 
     /**
@@ -32,7 +32,7 @@ interface EnvironmentCloudWeatherService {
      * @param cityId 城市id
      * @return Observable
      */
-    @GET("/v2/weatherforecast/YMFYB256AGFUZZE0ODQ3MZM1MZE2NTU=/{cityId}")
+    @GET("/v2/weatherforecast/CM9IYMLUC2GXNTIXMJGZMZI0OTY2/{cityId}")
     fun getWeatherForecast(@Path("cityId") cityId: String): Observable<EnvironmentCloudForecast>
 
     /**
@@ -44,6 +44,6 @@ interface EnvironmentCloudWeatherService {
      * @param cityId 城市id
      * @return Observable
      */
-    @GET("/v2/cityairlive/YMFYB256AGFUZZE0ODQ3MZM1MZE2NTU=/{cityId}")
+    @GET("/v2/cityairlive/CM9IYMLUC2GXNTIXMJGZMZI0OTY2/{cityId}")
     fun getAirLive(@Path("cityId") cityId: String): Observable<EnvironmentCloudCityAirLive>
 }

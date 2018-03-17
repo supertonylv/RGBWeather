@@ -7,7 +7,7 @@ enum class WeatherSettings {
     /*默认配置项*/
     SETTINGS_FIRST_USE("first_use", java.lang.Boolean.TRUE),
 
-    SETTINGS_CURRENT_CITY_ID("current_city_id", "");
+    SETTINGS_CURRENT_CITY_ID("current_city_id", "101020100");
 
     private var mId: String? = null
     private var mDefaultValue: Any? = null
